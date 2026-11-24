@@ -4,7 +4,7 @@ Portal web para que los empleados **soliciten novedades de personal** (retiros/i
 
 Reemplaza a los formularios en papel que hoy se escanean y se leen con IA en `../proyecto-auto-sc` (Node.js, en producción). Los dos sistemas van a convivir durante la transición.
 
-**Estado:** esqueleto inicial. Corre con Docker y tiene `/api/salud`, una pantalla de estado y la migración base. Todavía no hay modelos de negocio, login ni formularios. Las reglas heredadas están documentadas pero sin portar.
+**Estado:** Fase 1 terminada. Corre con Docker y tiene `/api/salud`, una pantalla de estado y la migración base. El motor de reglas (`app/reglas/`) y el Excel para GMS (`app/excel/`) ya están portados: dan idéntico al motor original en los 25 casos y reproducen `docs/Ejemplo-salida-GMS.xlsx`. Todavía no hay modelos de negocio, login, formularios ni endpoint de exportación.
 
 Para el desarrollo, usar el agente **`fullstack-dev`** (`.claude/agents/fullstack-dev.md`).
 
@@ -37,8 +37,9 @@ backend/
   app/db.py            Base declarativa, sesión por petición (sesion)
   app/api/             blueprint /api (una ruta por módulo: salud.py, ...)
   app/modelos/         modelos SQLAlchemy (importarlos en __init__ para Alembic)
-  app/reglas/          motor de reglas: solicitud aprobada → filas GMS (A PORTAR)
-  app/excel/           Excel de 16 columnas para GMS (A PORTAR)
+  app/reglas/          motor de reglas: generar_filas(solicitud, hoy) → list[FilaNovedad]
+                       (entradas.py: solicitudes tipadas; una regla por formulario; motivos.py: textos)
+  app/excel/           generar_excel(filas) → bytes, validar_fila / separar_validas, nombre_archivo
   migrations/          Alembic (versions/AAAAMMDD_rev_slug.py)
   tests/               pytest
 frontend/src/

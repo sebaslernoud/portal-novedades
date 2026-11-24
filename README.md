@@ -4,7 +4,7 @@ Web para que los empleados soliciten **licencias especiales, francos, cambios de
 
 Reemplaza a los formularios en papel que hoy se escanean y se procesan con IA en [proyecto-auto-sc](../proyecto-auto-sc). Hereda de ese proyecto todas las reglas de negocio: cómo se calculan las novedades, los textos de Observaciones y el formato del Excel.
 
-> **Estado:** esqueleto inicial. El entorno corre con Docker y muestra el estado del backend y la base. Los formularios, el circuito y la exportación se desarrollan a partir de acá.
+> **Estado:** el entorno corre con Docker y el motor de reglas y el Excel para GMS ya están portados de `proyecto-auto-sc` (25/25 casos idénticos). Los formularios, el login, el circuito y el endpoint de exportación se desarrollan a partir de acá.
 
 ---
 
