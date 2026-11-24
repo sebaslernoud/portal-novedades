@@ -1,8 +1,12 @@
 FROM python:3.12-slim
 
+# Timeout y reintentos altos para tolerar redes lentas: con los valores por defecto (15 s) pip corta descargas a mitad de camino.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_DEFAULT_TIMEOUT=120 \
+    PIP_RETRIES=10
 
 WORKDIR /app
 
