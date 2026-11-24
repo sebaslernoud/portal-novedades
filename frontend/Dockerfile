@@ -5,7 +5,8 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm install
+# Tolerar redes lentas sin cortar la instalación.
+RUN npm install --fetch-timeout=600000 --fetch-retries=5
 
 COPY . .
 
