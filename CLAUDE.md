@@ -4,7 +4,11 @@ Portal web para que los empleados **soliciten novedades de personal** (retiros/i
 
 Reemplaza a los formularios en papel que hoy se escanean y se leen con IA en `../proyecto-auto-sc` (Node.js, en producción). Los dos sistemas van a convivir durante la transición.
 
-**Estado:** Fase 1 terminada. Corre con Docker y tiene `/api/salud`, una pantalla de estado y la migración base. El motor de reglas (`app/reglas/`) y el Excel para GMS (`app/excel/`) ya están portados: dan idéntico al motor original en los 25 casos y reproducen `docs/Ejemplo-salida-GMS.xlsx`. Todavía no hay modelos de negocio, login, formularios ni endpoint de exportación.
+**Estado:** Fase 2a terminada.
+- **Fase 1:** el motor de reglas (`app/reglas/`) y el Excel para GMS (`app/excel/`) están portados. Dan idéntico al motor original en los 25 casos.
+- **Fase 2a:** hay solicitudes con auditoría, los 5 formularios web (borrador → revisión con advertencias → envío) y la exportación de las APROBADA a un Excel por lote, que se puede volver a bajar idéntico.
+- **Sin login ni padrón:** hay un **usuario de prueba** elegido en pantalla (header `X-Legajo-Prueba`) y un directorio ficticio en `app/identidad_prueba.py`.
+- **Sin circuito de aprobación:** las solicitudes llegan a APROBADA solo con `flask sembrar`. Tampoco hay adjuntos todavía.
 
 Para el desarrollo, usar el agente **`fullstack-dev`** (`.claude/agents/fullstack-dev.md`).
 
@@ -23,8 +27,11 @@ docker compose exec backend alembic upgrade head             # aplicar migracion
 docker compose exec frontend npm test                        # tests del frontend
 docker compose exec frontend npm run lint
 docker compose exec frontend npm run typecheck
+docker compose exec backend flask sembrar                    # 5 solicitudes APROBADA ficticias (solo desarrollo)
 docker compose down -v                                       # bajar y BORRAR la base local
 ```
+- Los tests del backend usan una base aparte, `portal_novedades_test`, que se crea y migra sola. Cada test corre en una transacción que se deshace al final.
+- `IDENTIDAD_DE_PRUEBA=1` (solo en el compose de desarrollo) habilita el usuario de prueba. **Nunca activarlo en producción.**
 - Frontend: http://localhost:5173. API: http://localhost:5000/api/salud.
 - En desarrollo Vite redirige `/api` al backend, así que el front siempre llama a rutas relativas `/api/...`.
 - Antes de dar algo por terminado: los tests y el lint de los dos lados en verde.
@@ -35,16 +42,28 @@ backend/
   app/__init__.py      crear_app(): fábrica de Flask
   app/config.py        variables de entorno
   app/db.py            Base declarativa, sesión por petición (sesion)
-  app/api/             blueprint /api (una ruta por módulo: salud.py, ...)
-  app/modelos/         modelos SQLAlchemy (importarlos en __init__ para Alembic)
+  app/api/             blueprint /api, un módulo por recurso (solicitudes, exportaciones, usuarios, salud)
+                       + serializacion.py (modelos → JSON, fechas ISO)
+  app/errores.py       ErrorApi / ErrorValidacion → {"codigo","mensaje","errores"}
+  app/identidad.py     usuario_actual(), buscar_persona, listar_jefes: el punto a reemplazar por login y padrón
+  app/modelos/         Solicitud, RegistroAuditoria, LoteExportacion, Novedad (importarlos en __init__)
+  app/solicitudes/     validacion.py (JSON → entradas del motor), servicio.py (borrador, envío, consulta)
+  app/exportacion/     servicio.py: lote todo-o-nada, APROBADA → EXPORTADA, Excel desde las novedades guardadas
   app/reglas/          motor de reglas: generar_filas(solicitud, hoy) → list[FilaNovedad]
-                       (entradas.py: solicitudes tipadas; una regla por formulario; motivos.py: textos)
+                       (entradas.py: solicitudes tipadas; una regla por formulario; motivos.py: textos;
+                       advertencias.py: motivos del motor + GEN-1 y RI-4 de la especificación)
   app/excel/           generar_excel(filas) → bytes, validar_fila / separar_validas, nombre_archivo
+  app/cli.py           flask sembrar
   migrations/          Alembic (versions/AAAAMMDD_rev_slug.py)
-  tests/               pytest
+  tests/               pytest (conftest: base de pruebas; casos_heredados.py: adaptador de los 25 casos)
 frontend/src/
-  api/                 cliente de la API (fetch tipado)
-  App.tsx, main.tsx
+  api/                 cliente (fetch tipado, ErrorApi, header de usuario de prueba) y tipos.ts
+  contexto/Usuario.tsx usuario de prueba elegido en pantalla
+  componentes/         campos, renglones, selector de jefe, buscador de compañero, advertencias, tabla GMS
+  formularios/         un componente por tipo de solicitud
+  paginas/             MisSolicitudes, NuevaSolicitud, DetalleSolicitud, ExportacionRrhh, EstadoSistema
+  pruebas/             simularApi() y renderizarApp() para los tests
+  textos.ts            nombres, estados, tipos de licencia y formato de fechas
 docs/                  especificación, reglas heredadas, casos de prueba, Excel de referencia
 scripts/               generar-casos-desde-auto-sc.mjs (regenera los casos desde el motor JS)
 ```
@@ -83,7 +102,12 @@ No avanzar con login ni padrón sin estas respuestas de RR.HH. y Sistemas. Pregu
   - Si las solicitudes vencen.
   - Fecha de AnioNovedad y mesNovedad (aprobación o exportación).
   - Cuándo se carga CODIGOFUTURO.
-- **Hosting de producción:** probablemente Google Cloud Run + Cloud SQL, como `proyecto-auto-sc`, pero no está decidido.
+- **Hosting de producción:** probablemente Google Cloud Run + Cloud SQL, como `proyecto-auto-sc`, pero no está decidido. De esto depende dónde se guardan los adjuntos.
+
+Supuestos provisorios que ya están en el código (cambiarlos cuando RR.HH. decida):
+- AnioNovedad y mesNovedad salen de la **fecha de exportación**.
+- No hay advertencia CT-1: la matriz de campos y el motor permiten devolver el cambio de turno el mismo día.
+- La integración con GMS es un Excel por lote que RR.HH. importa a mano. El estado final es `EXPORTADA`.
 
 ## Datos sensibles
 Las solicitudes contienen datos personales y, en las licencias, datos de salud (Ley 25.326).

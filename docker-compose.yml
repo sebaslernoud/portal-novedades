@@ -28,6 +28,8 @@ services:
       SECRET_KEY: ${SECRET_KEY:-solo-para-desarrollo}
       TZ_NEGOCIO: America/Argentina/Buenos_Aires
       FLASK_APP: wsgi.py
+      # Solo desarrollo: usuario elegido desde la pantalla (sin login). Nunca en producción.
+      IDENTIDAD_DE_PRUEBA: "1"
     # Desarrollo: aplica migraciones y levanta Flask con recarga automática.
     command: sh -c "alembic upgrade head && flask run --host 0.0.0.0 --port 5000 --debug"
     ports:

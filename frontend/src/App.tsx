@@ -1,30 +1,56 @@
-import { useEffect, useState } from 'react';
-import { obtenerSalud, type EstadoSalud } from './api/cliente';
+import { NavLink, Route, Routes } from 'react-router-dom';
+import SelectorUsuarioPrueba from './componentes/SelectorUsuarioPrueba';
+import { useUsuario } from './contexto/Usuario';
+import DetalleSolicitud from './paginas/DetalleSolicitud';
+import EstadoSistema from './paginas/EstadoSistema';
+import ExportacionRrhh from './paginas/ExportacionRrhh';
+import MisSolicitudes from './paginas/MisSolicitudes';
+import NuevaSolicitud from './paginas/NuevaSolicitud';
 
 export default function App() {
-  const [salud, setSalud] = useState<EstadoSalud | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    obtenerSalud().then(setSalud).catch((e: Error) => setError(e.message));
-  }, []);
+  const { usuario, cargando, error } = useUsuario();
+  const esRrhh = usuario?.roles.includes('rrhh') ?? false;
 
   return (
-    <main className="contenedor">
-      <h1>Portal de Novedades</h1>
-      <p>Solicitudes de licencias, francos y cambios de turno.</p>
-      <section className="tarjeta" aria-live="polite">
-        <h2>Estado del sistema</h2>
-        {error && <p className="error">No se pudo conectar con el backend: {error}</p>}
-        {!error && !salud && <p>Consultando…</p>}
-        {salud && (
-          <ul>
-            <li>Backend: {salud.estado === 'ok' ? 'funcionando' : 'con problemas'}</li>
-            <li>Base de datos: {salud.base_de_datos}</li>
-            {salud.migracion && <li>Migración: {salud.migracion}</li>}
-          </ul>
+    <>
+      <header className="encabezado">
+        <div className="contenedor encabezado-interno">
+          <strong className="marca">Portal de Novedades</strong>
+          {usuario && (
+            <nav aria-label="Principal">
+              <NavLink to="/" end>
+                Mis solicitudes
+              </NavLink>
+              <NavLink to="/nueva">Nueva solicitud</NavLink>
+              {esRrhh && <NavLink to="/exportacion">Exportación GMS</NavLink>}
+            </nav>
+          )}
+          <SelectorUsuarioPrueba />
+        </div>
+      </header>
+      <main className="contenedor">
+        {error && <p className="error">No se pudo cargar la lista de usuarios de prueba: {error}</p>}
+        {!usuario ? (
+          !cargando && (
+            <>
+              <h1>Portal de Novedades</h1>
+              <p>Solicitudes de licencias, francos y cambios de turno.</p>
+              <p className="aviso">Todavía no hay login: elegí un usuario de prueba arriba para empezar.</p>
+              <EstadoSistema />
+            </>
+          )
+        ) : (
+          <Routes key={usuario.legajo}>
+            <Route path="/" element={<MisSolicitudes />} />
+            <Route path="/nueva" element={<NuevaSolicitud />} />
+            <Route path="/solicitudes/:id" element={<DetalleSolicitud />} />
+            <Route path="/solicitudes/:id/editar" element={<NuevaSolicitud />} />
+            <Route path="/exportacion" element={esRrhh ? <ExportacionRrhh /> : <p>Solo para RR.HH.</p>} />
+            <Route path="/estado" element={<EstadoSistema />} />
+            <Route path="*" element={<p>Esta página no existe.</p>} />
+          </Routes>
         )}
-      </section>
-    </main>
+      </main>
+    </>
   );
 }

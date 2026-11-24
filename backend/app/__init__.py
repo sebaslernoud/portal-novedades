@@ -12,6 +12,8 @@ def crear_app(config: type[Config] = Config) -> Flask:
     iniciar_db(app)
 
     from app.api import api
+    from app.cli import sembrar
 
     app.register_blueprint(api)
+    app.cli.add_command(sembrar)
     return app

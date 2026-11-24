@@ -1,5 +1,7 @@
 """Textos de las advertencias. Centralizados porque agregar_motivos deduplica por texto idéntico."""
 
+from datetime import date
+
 FALTA_LEGAJO = "Falta el legajo"
 COMPLETAR_HORA_HASTA = "Completar HORAHASTA a mano (depende del horario de la persona)"
 FALTA_HORA_HASTA = "Falta HORAHASTA"
@@ -21,6 +23,12 @@ COMPLETAR_FICHADA_FRANCO = (
     "El día trabajado es futuro; completar a mano una fecha ya trabajada para validar las fichadas"
 )
 FRANCO_SIN_FECHAS = "Formulario de franco sin fecha del franco ni día trabajado; completar a mano"
+# Propias del portal (especificación §6), no existen en el motor heredado.
+SIN_DEVOLUCIONES = "No se cargó ninguna devolución de horas"
+
+
+def fecha_lejana(fecha: date) -> str:
+    return f"La fecha {fecha.day:02d}/{fecha.month:02d}/{fecha.year} está a más de 1 año de hoy, confirmar"
 
 
 def falta(campo: str) -> str:
