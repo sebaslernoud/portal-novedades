@@ -1,0 +1,1833 @@
+{
+  "descripcion": "Casos generados con el motor de reglas de proyecto-auto-sc (JavaScript). Para cada caso: los datos de entrada en el formato que recibe el motor y las filas GMS que produce, con sus motivos de revisión (advertencias). El port a Python tiene que producir exactamente lo mismo. Fecha de hoy fija: 24/11/2026.",
+  "generadoDesde": "proyecto-auto-sc @ 0c869e3",
+  "casos": [
+    {
+      "nombre": "retiro_horas_exactas",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "16:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": "Turno médico",
+          "devoluciones": [
+            {
+              "fecha": "27/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 16:00 hs. Devuelve el día 27/11/2026. Turno médico",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 16:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "ingreso_dos_devoluciones",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "ingresar",
+          "fecha": "25/11/2026",
+          "hora": "11:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": "Trámite",
+          "devoluciones": [
+            {
+              "fecha": "26/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "19:00"
+            },
+            {
+              "fecha": "27/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "19:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            42,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 42,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Ingreso 11:00 hs. Devuelve los días 26/11/2026 y 27/11/2026. Trámite",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "26/11/2026",
+          "fechaHasta": "26/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 09:00-11:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "19:00",
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 09:00-11:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "19:00",
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_horas_no_cierran",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "16:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": null,
+          "devoluciones": [
+            {
+              "fecha": "27/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "19:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 16:00 hs. Devuelve el día 27/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 16:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "19:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "Las horas no cierran: adeuda 2 h y devuelve 1 h, confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_horas_a_favor",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "16:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": null,
+          "devoluciones": [
+            {
+              "fecha": "27/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "21:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 16:00 hs. Devuelve el día 27/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 16:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Horas a favor el 27/11/2026 de 20:00 a 21:00 hs, excedente de la devolución del retiro del 25/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "20:00",
+          "horaHasta": "21:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "Horas a favor: devuelve 1 h más de lo que adeuda, confirmar si se registran"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_devolucion_anterior",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "16:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": null,
+          "devoluciones": [
+            {
+              "fecha": "20/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 16:00 hs. Devuelve el día 20/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 16:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "La devolución (20/11/2026) es anterior al retiro/ingreso (25/11/2026), confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_sin_devoluciones",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "16:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": "Personal",
+          "devoluciones": []
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 16:00 hs. Personal",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_turno_noche",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "04:00",
+          "horarioLaboralDesde": "22:00",
+          "horarioLaboralHasta": "06:00",
+          "motivo": null,
+          "devoluciones": [
+            {
+              "fecha": "28/11/2026",
+              "horaDesde": "06:00",
+              "horaHasta": "08:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 04:00 hs. Devuelve el día 28/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "28/11/2026",
+          "fechaHasta": "28/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 04:00-06:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "06:00",
+          "horaHasta": "08:00",
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "retiro_hora_fuera_de_horario",
+      "tipoFormulario": "retiro_ingreso_fuera_horario",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "retiro_ingreso_fuera_horario",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "retiroIngreso": {
+          "opcionMarcada": "retirarme",
+          "fecha": "25/11/2026",
+          "hora": "20:00",
+          "horarioLaboralDesde": "09:00",
+          "horarioLaboralHasta": "18:00",
+          "motivo": null,
+          "devoluciones": [
+            {
+              "fecha": "27/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            }
+          ]
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            26,
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 26,
+          "cantidad": 1,
+          "fechaDesde": "25/11/2026",
+          "fechaHasta": "25/11/2026",
+          "observaciones": "Retiro 20:00 hs. Devuelve el día 27/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "La hora del retiro/ingreso queda fuera del horario laboral declarado, confirmar"
+          ]
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "27/11/2026",
+          "fechaHasta": "27/11/2026",
+          "observaciones": "Devolución de horas. No trabajó el 25/11/2026 20:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "No se pudo verificar que las horas de devolución cierren (falta el horario laboral o alguna hora), confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "licencia_matrimonio_ok",
+      "tipoFormulario": "licencia_especial",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "licencia_especial",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "licenciaEspecial": {
+          "motivoTexto": null,
+          "tipoLicencia": "matrimonio",
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "10/12/2026",
+          "fechaReintegro": null,
+          "cantidadDiasNumero": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            41
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 41,
+          "cantidad": 10,
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "10/12/2026",
+          "observaciones": "Licencia especial: matrimonio",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": 4,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "licencia_matrimonio_supera_tope",
+      "tipoFormulario": "licencia_especial",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "licencia_especial",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "licenciaEspecial": {
+          "motivoTexto": null,
+          "tipoLicencia": "matrimonio",
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "12/12/2026",
+          "fechaReintegro": null,
+          "cantidadDiasNumero": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            41
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 41,
+          "cantidad": 12,
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "12/12/2026",
+          "observaciones": "Licencia especial: matrimonio",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": 4,
+          "motivos": [
+            "Se piden 12 días de matrimonio y el máximo legal es 10 (LCT art. 158), confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "licencia_maternidad_sin_codigo_futuro",
+      "tipoFormulario": "licencia_especial",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "licencia_especial",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "licenciaEspecial": {
+          "motivoTexto": null,
+          "tipoLicencia": "maternidad",
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "28/02/2027",
+          "fechaReintegro": null,
+          "cantidadDiasNumero": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            41
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 41,
+          "cantidad": 90,
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "28/02/2027",
+          "observaciones": "Licencia especial: maternidad",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "Sin código futuro para este tipo de licencia; completar CODIGOFUTURO a mano"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "licencia_examen_hasta_desde_reintegro",
+      "tipoFormulario": "licencia_especial",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "licencia_especial",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "licenciaEspecial": {
+          "motivoTexto": null,
+          "tipoLicencia": "examen",
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": null,
+          "fechaReintegro": "03/12/2026",
+          "cantidadDiasNumero": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            41
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 41,
+          "cantidad": 2,
+          "fechaDesde": "01/12/2026",
+          "fechaHasta": "02/12/2026",
+          "observaciones": "Licencia especial: examen",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": 7,
+          "motivos": [
+            "FechaHasta deducida de la fecha de reintegro (03/12/2026), confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "licencia_hasta_anterior_a_desde",
+      "tipoFormulario": "licencia_especial",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "licencia_especial",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "licenciaEspecial": {
+          "motivoTexto": null,
+          "tipoLicencia": "mudanza",
+          "fechaDesde": "10/12/2026",
+          "fechaHasta": "05/12/2026",
+          "fechaReintegro": null,
+          "cantidadDiasNumero": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            41
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 41,
+          "cantidad": null,
+          "fechaDesde": "10/12/2026",
+          "fechaHasta": "05/12/2026",
+          "observaciones": "Licencia especial: mudanza",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": 13,
+          "motivos": [
+            "Falta Cantidad",
+            "FechaHasta anterior a FechaDesde"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "franco_comp_dos_dias_exacto",
+      "tipoFormulario": "franco_compensatorio",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_compensatorio",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoCompensatorio": {
+          "fechaFranco": "30/11/2026",
+          "horaDesdeFranco": "09:00",
+          "horaHastaFranco": "13:00",
+          "diasTrabajados": [
+            {
+              "fecha": "20/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            },
+            {
+              "fecha": "21/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            }
+          ],
+          "francoADeterminar": false,
+          "motivo": "Cierre de mes"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            28,
+            38
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 38,
+          "cantidad": 1,
+          "fechaDesde": "30/11/2026",
+          "fechaHasta": "30/11/2026",
+          "observaciones": "Franco compensatorio 09:00-13:00 hs. Compensa lo trabajado los días 20/11/2026 y 21/11/2026. Cierre de mes",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Devolución de horas por tareas adicionales el 20/11/2026 de 18:00 a 20:00 hs. No trabajó el 30/11/2026 09:00-13:00 hs. Cierre de mes",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": "20/11/2026",
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "21/11/2026",
+          "fechaHasta": "21/11/2026",
+          "observaciones": "Devolución de horas por tareas adicionales el 21/11/2026 de 18:00 a 20:00 hs. No trabajó el 30/11/2026 09:00-13:00 hs. Cierre de mes",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": "21/11/2026",
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "franco_comp_solo_franco",
+      "tipoFormulario": "franco_compensatorio",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_compensatorio",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoCompensatorio": {
+          "fechaFranco": "30/11/2026",
+          "horaDesdeFranco": "09:00",
+          "horaHastaFranco": "18:00",
+          "diasTrabajados": [],
+          "francoADeterminar": false,
+          "motivo": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            38
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 38,
+          "cantidad": 1,
+          "fechaDesde": "30/11/2026",
+          "fechaHasta": "30/11/2026",
+          "observaciones": "Franco compensatorio 09:00-18:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "franco_comp_solo_dia_futuro",
+      "tipoFormulario": "franco_compensatorio",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_compensatorio",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoCompensatorio": {
+          "fechaFranco": null,
+          "horaDesdeFranco": null,
+          "horaHastaFranco": null,
+          "diasTrabajados": [
+            {
+              "fecha": "28/11/2026",
+              "horaDesde": "07:00",
+              "horaHasta": "15:00"
+            }
+          ],
+          "francoADeterminar": true,
+          "motivo": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            28
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "28/11/2026",
+          "fechaHasta": "28/11/2026",
+          "observaciones": "Devolución de horas por tareas adicionales el 28/11/2026 de 07:00 a 15:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": "07:00",
+          "horaHasta": "15:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "El día trabajado es futuro; completar a mano una fecha ya trabajada para validar las fichadas"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "franco_comp_horas_a_favor",
+      "tipoFormulario": "franco_compensatorio",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_compensatorio",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoCompensatorio": {
+          "fechaFranco": "30/11/2026",
+          "horaDesdeFranco": "09:00",
+          "horaHastaFranco": "11:00",
+          "diasTrabajados": [
+            {
+              "fecha": "20/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "21:00"
+            }
+          ],
+          "francoADeterminar": false,
+          "motivo": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            28,
+            38
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 38,
+          "cantidad": 1,
+          "fechaDesde": "30/11/2026",
+          "fechaHasta": "30/11/2026",
+          "observaciones": "Franco compensatorio 09:00-11:00 hs. Compensa lo trabajado el día 20/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Devolución de horas por tareas adicionales el 20/11/2026 de 18:00 a 20:00 hs. No trabajó el 30/11/2026 09:00-11:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": "20/11/2026",
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Horas a favor el 20/11/2026 de 20:00 a 21:00 hs, excedente de lo trabajado para el franco del 30/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": "20/11/2026",
+          "fechaNov28": null,
+          "horaDesde": "20:00",
+          "horaHasta": "21:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "Horas a favor: trabajó 1 h más de lo que dura el franco, confirmar si se registran"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "franco_comp_mismo_dia",
+      "tipoFormulario": "franco_compensatorio",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_compensatorio",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoCompensatorio": {
+          "fechaFranco": "20/11/2026",
+          "horaDesdeFranco": "09:00",
+          "horaHastaFranco": "11:00",
+          "diasTrabajados": [
+            {
+              "fecha": "20/11/2026",
+              "horaDesde": "18:00",
+              "horaHasta": "20:00"
+            }
+          ],
+          "francoADeterminar": false,
+          "motivo": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            28,
+            38
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 38,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Franco compensatorio 09:00-11:00 hs. Compensa lo trabajado el día 20/11/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "El franco y el día trabajado son el mismo día (20/11/2026), confirmar"
+          ]
+        },
+        {
+          "legajo": 1234,
+          "concepto": 28,
+          "cantidad": 1,
+          "fechaDesde": "20/11/2026",
+          "fechaHasta": "20/11/2026",
+          "observaciones": "Devolución de horas por tareas adicionales el 20/11/2026 de 18:00 a 20:00 hs. No trabajó el 20/11/2026 09:00-11:00 hs.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": "20/11/2026",
+          "fechaNov28": null,
+          "horaDesde": "18:00",
+          "horaHasta": "20:00",
+          "codigoFuturo": null,
+          "motivos": [
+            "El franco y el día trabajado son el mismo día (20/11/2026), confirmar"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "franco_autorizado",
+      "tipoFormulario": "franco_autorizado",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "franco_autorizado",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "francoAutorizado": {
+          "fechaFranco": "02/12/2026",
+          "motivo": "Cumpleaños"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            40
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 40,
+          "cantidad": 1,
+          "fechaDesde": "02/12/2026",
+          "fechaHasta": "02/12/2026",
+          "observaciones": "Franco autorizado. Cumpleaños",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "cambio_turno_dos_personas",
+      "tipoFormulario": "cambio_turno",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "cambio_turno",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "solicitante",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          },
+          {
+            "rol": "aceptante",
+            "nombre": "ANA GOMEZ",
+            "legajoTexto": "5678",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "cambioTurno": {
+          "fechaCambio": "06/12/2026",
+          "fechaDevolucion": "10/12/2026"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            37
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "JUAN PEREZ x ANA GOMEZ - Día del Cambio: 06/12/2026 - Día de devolución: 10/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "10/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 5678,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "10/12/2026",
+          "fechaHasta": "10/12/2026",
+          "observaciones": "ANA GOMEZ x JUAN PEREZ - Día del Cambio: 10/12/2026 - Día de devolución: 06/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "06/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "cambio_turno_devolucion_mismo_dia",
+      "tipoFormulario": "cambio_turno",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "cambio_turno",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "solicitante",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          },
+          {
+            "rol": "aceptante",
+            "nombre": "ANA GOMEZ",
+            "legajoTexto": "5678",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "cambioTurno": {
+          "fechaCambio": "06/12/2026",
+          "fechaDevolucion": "06/12/2026"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            37
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "JUAN PEREZ x ANA GOMEZ - Día del Cambio: 06/12/2026 - Día de devolución: 06/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "06/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        },
+        {
+          "legajo": 5678,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "ANA GOMEZ x JUAN PEREZ - Día del Cambio: 06/12/2026 - Día de devolución: 06/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "06/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "cambio_turno_misma_persona",
+      "tipoFormulario": "cambio_turno",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "cambio_turno",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "solicitante",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          },
+          {
+            "rol": "aceptante",
+            "nombre": "Perez Juan",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "cambioTurno": {
+          "fechaCambio": "06/12/2026",
+          "fechaDevolucion": "10/12/2026"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            37
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "JUAN PEREZ x Perez Juan - Día del Cambio: 06/12/2026 - Día de devolución: 10/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "10/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "Solicitante y aceptante tienen el mismo legajo o nombre"
+          ]
+        },
+        {
+          "legajo": 1234,
+          "concepto": 37,
+          "cantidad": 1,
+          "fechaDesde": "10/12/2026",
+          "fechaHasta": "10/12/2026",
+          "observaciones": "Perez Juan x JUAN PEREZ - Día del Cambio: 10/12/2026 - Día de devolución: 06/12/2026",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": "06/12/2026",
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "Solicitante y aceptante tienen el mismo legajo o nombre"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "cambio_horario_una_persona",
+      "tipoFormulario": "cambio_turno",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "cambio_turno",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "solicitante",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          },
+          {
+            "rol": "aceptante",
+            "nombre": null,
+            "legajoTexto": null,
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "cambioTurno": {
+          "fechaCambio": "06/12/2026",
+          "fechaDevolucion": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            22
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 22,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "Cambio de horario el 06/12/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    },
+    {
+      "nombre": "cambio_horario_fechas_distintas",
+      "tipoFormulario": "cambio_turno",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "cambio_turno",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "solicitante",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "cambioTurno": {
+          "fechaCambio": "06/12/2026",
+          "fechaDevolucion": "09/12/2026"
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            22
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 22,
+          "cantidad": 1,
+          "fechaDesde": "06/12/2026",
+          "fechaHasta": "06/12/2026",
+          "observaciones": "Cambio de horario el 06/12/2026.",
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": [
+            "Cambio de horario con fecha de devolución (09/12/2026) distinta del día del cambio (06/12/2026): confirmar si es un cambio de horario o un cambio de turno sin el compañero"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "vacaciones",
+      "tipoFormulario": "comunicacion_vacacional",
+      "hoy": "24/11/2026",
+      "entrada": {
+        "paginaEnBlanco": false,
+        "tipoFormulario": "comunicacion_vacacional",
+        "confianzaTipo": "alta",
+        "tituloFormulario": null,
+        "fechaFormulario": null,
+        "personas": [
+          {
+            "rol": "titular",
+            "nombre": "JUAN PEREZ",
+            "legajoTexto": "1234",
+            "legajoDudoso": false,
+            "sector": null
+          }
+        ],
+        "vacaciones": {
+          "fechaDesde": "04/01/2027",
+          "fechaHasta": "17/01/2027",
+          "fechaReintegro": null,
+          "cantidadDiasNumero": 14,
+          "cantidadDiasTexto": null
+        },
+        "novedad": {
+          "nombreEscrito": null,
+          "codigosDeducidos": [
+            2
+          ],
+          "fundamento": ""
+        },
+        "dudas": [],
+        "inconsistencias": [],
+        "resumenContenido": ""
+      },
+      "filasEsperadas": [
+        {
+          "legajo": 1234,
+          "concepto": 2,
+          "cantidad": 14,
+          "fechaDesde": "04/01/2027",
+          "fechaHasta": "17/01/2027",
+          "observaciones": null,
+          "anioNovedad": 2026,
+          "mesNovedad": 11,
+          "fechaValidarFichadas": null,
+          "fechaNov28": null,
+          "horaDesde": null,
+          "horaHasta": null,
+          "codigoFuturo": null,
+          "motivos": []
+        }
+      ]
+    }
+  ]
+}

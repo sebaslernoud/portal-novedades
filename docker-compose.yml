@@ -1,0 +1,55 @@
+# Entorno de desarrollo: PostgreSQL + backend Flask + frontend React (Vite).
+#   docker compose up --build
+# Frontend: http://localhost:5173 · API: http://localhost:5000/api/salud
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-portal}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portal}
+      POSTGRES_DB: ${POSTGRES_DB:-portal_novedades}
+    ports:
+      - "5432:5432"
+    volumes:
+      - datos_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portal} -d ${POSTGRES_DB:-portal_novedades}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        REQUISITOS: requirements-dev.txt
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-portal}:${POSTGRES_PASSWORD:-portal}@db:5432/${POSTGRES_DB:-portal_novedades}
+      SECRET_KEY: ${SECRET_KEY:-solo-para-desarrollo}
+      TZ_NEGOCIO: America/Argentina/Buenos_Aires
+      FLASK_APP: wsgi.py
+    # Desarrollo: aplica migraciones y levanta Flask con recarga automática.
+    command: sh -c "alembic upgrade head && flask run --host 0.0.0.0 --port 5000 --debug"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - ./docs:/docs:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    environment:
+      API_URL: http://backend:5000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  datos_postgres:

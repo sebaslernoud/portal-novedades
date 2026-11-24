@@ -1,0 +1,18 @@
+# Variables y secretos
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# Editor / sistema
+.vscode/
+.DS_Store
+Thumbs.db
