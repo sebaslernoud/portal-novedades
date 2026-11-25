@@ -6,7 +6,8 @@ import type { PropsFormulario } from './tipos';
 export default function LicenciaEspecial({ datos, errores, cambiar }: PropsFormulario<DatosLicenciaEspecial>) {
   const dias = diasInclusivos(datos.fecha_desde, datos.fecha_hasta);
 
-  // Si completa el reintegro y todavía no puso la fecha hasta, se sugiere el día anterior.
+  // Si completa la reincorporación y todavía no puso la fecha hasta, se sugiere el día anterior.
+  // El dato se sigue llamando fecha_reintegro, como en el motor heredado.
   const cambiarReintegro = (fecha_reintegro: string) =>
     cambiar(
       fecha_reintegro && !datos.fecha_hasta
@@ -41,7 +42,8 @@ export default function LicenciaEspecial({ datos, errores, cambiar }: PropsFormu
           alCambiar={(fecha_hasta) => cambiar({ fecha_hasta })}
         />
         <CampoFecha
-          etiqueta="Fecha de reintegro"
+          etiqueta="Fecha de reincorporación"
+          ayuda="Si la completás, te sugerimos como fecha hasta el día anterior."
           valor={datos.fecha_reintegro}
           error={errores['datos.fecha_reintegro']}
           alCambiar={cambiarReintegro}

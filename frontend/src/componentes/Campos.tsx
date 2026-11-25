@@ -89,10 +89,12 @@ export function CampoSelector({ opciones, ...props }: PropsSelector) {
   );
 }
 
-export function CampoOpciones({ opciones, ...props }: PropsSelector) {
+// `destacado`: título y opciones más grandes, para elecciones que definen el resto del formulario.
+export function CampoOpciones({ opciones, destacado, ...props }: PropsSelector & { destacado?: boolean }) {
   const nombre = useId();
+  const clases = ['campo', destacado && 'campo-opciones-destacado', props.error && 'campo-con-error'];
   return (
-    <fieldset className={`campo${props.error ? ' campo-con-error' : ''}`} aria-required={props.obligatorio}>
+    <fieldset className={clases.filter(Boolean).join(' ')} aria-required={props.obligatorio}>
       <legend>
         {props.etiqueta}
         {props.obligatorio && <span aria-hidden="true"> *</span>}

@@ -7,6 +7,7 @@ export default function RetiroIngreso({ datos, errores, cambiar }: PropsFormular
   return (
     <>
       <CampoOpciones
+        destacado
         etiqueta="Tipo"
         obligatorio
         valor={datos.tipo_movimiento}
