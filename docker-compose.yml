@@ -45,6 +45,8 @@ services:
     build: ./frontend
     environment:
       API_URL: http://backend:5000
+      # Recarga automática con la carpeta montada desde Windows/macOS (ver vite.config.ts).
+      VITE_WATCH_POLLING: "1"
     ports:
       - "5173:5173"
     volumes:
