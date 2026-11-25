@@ -999,6 +999,64 @@ a.item-solicitud:hover {
   font-size: 0.9rem;
 }
 
+/* Contador redondo (menú "Por aprobar" y títulos de la bandeja). */
+.contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--radio-pildora);
+  background: var(--amarillo);
+  color: var(--azul-oscuro);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.seccion-bandeja + .seccion-bandeja {
+  margin-top: 8px;
+}
+
+.seccion-bandeja h2 {
+  margin-bottom: 4px;
+}
+
+.nota-icono {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+/* Panel "Tu decisión" del detalle. */
+.panel-decision {
+  background: var(--azul-suave);
+  border: 2px solid var(--azul);
+  border-radius: var(--radio-grande);
+  padding: 18px 20px;
+  margin: 20px 0;
+}
+
+.panel-decision h2 {
+  margin: 0 0 4px;
+}
+
+.panel-decision .acciones {
+  justify-content: flex-start;
+}
+
+.boton-rechazar:hover:not(:disabled) {
+  background: var(--rojo-suave);
+  border-color: var(--rojo);
+  color: var(--rojo);
+}
+
+.boton-peligro:hover:not(:disabled) {
+  background: #b3261e;
+  border-color: #b3261e;
+}
+
 .contador-advertencias {
   display: inline-flex;
   align-items: center;
@@ -1076,6 +1134,17 @@ a.item-solicitud:hover {
 
 .estado-exportada,
 .estado-cargada_gms {
+  background: var(--turquesa-suave);
+  color: var(--turquesa-oscuro);
+}
+
+/* Lo que ven empleados y jefes en lugar de Aprobada / Exportada a GMS. */
+.estado-no_cargada {
+  background: var(--amarillo-suave);
+  color: var(--amarillo-oscuro);
+}
+
+.estado-cargada {
   background: var(--turquesa-suave);
   color: var(--turquesa-oscuro);
 }
@@ -1270,6 +1339,14 @@ tbody tr:last-child td {
 
 .historial li.historial-rechazada::before {
   background: var(--rojo);
+}
+
+.historial li.historial-cargada::before {
+  background: var(--turquesa);
+}
+
+.historial li.historial-no_cargada::before {
+  background: var(--lima);
 }
 
 .historial li.historial-borrador::before {

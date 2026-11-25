@@ -7,7 +7,7 @@ import {
   Stethoscope,
   type LucideIcon,
 } from 'lucide-react';
-import type { DatosPorTipo, EstadoSolicitud, TipoSolicitud } from './api/tipos';
+import type { DatosPorTipo, EstadoVisible, TipoSolicitud } from './api/tipos';
 
 // Colores de la paleta (ver estilos.css). El rojo no está: queda para errores y alertas.
 export type ColorPaleta = 'turquesa' | 'celeste' | 'lima' | 'amarillo' | 'azul';
@@ -47,7 +47,9 @@ export const TIPOS: Record<TipoSolicitud, DefinicionTipo> = {
   },
 };
 
-export const ESTADOS: Record<EstadoSolicitud, string> = {
+export const ESTADOS: Record<EstadoVisible, string> = {
+  NO_CARGADA: 'No cargada',
+  CARGADA: 'Cargada',
   BORRADOR: 'Borrador',
   PENDIENTE_COMPANERO: 'Esperando al compañero',
   PENDIENTE_JEFE: 'Esperando al jefe',

@@ -4,7 +4,7 @@ Web para que los empleados soliciten **licencias especiales, francos, cambios de
 
 Reemplaza a los formularios en papel que hoy se escanean y se procesan con IA en [proyecto-auto-sc](../proyecto-auto-sc). Hereda de ese proyecto todas las reglas de negocio: cómo se calculan las novedades, los textos de Observaciones y el formato del Excel.
 
-> **Estado:** ya están el motor de reglas y el Excel para GMS, portados de `proyecto-auto-sc` (25/25 casos idénticos), los 5 formularios web con sus advertencias y la exportación de las aprobadas. Faltan el login, el padrón, el circuito de aprobación y los adjuntos, que dependen de definiciones de RR.HH. y Sistemas.
+> **Estado:** ya están el motor de reglas y el Excel para GMS, portados de `proyecto-auto-sc` (25/25 casos idénticos), los 5 formularios web con sus advertencias, el circuito de aprobación (compañero → jefe → RR.HH.) y la exportación de las aprobadas. Faltan el login, el padrón y los adjuntos, que dependen de definiciones de RR.HH. y Sistemas.
 
 ---
 
@@ -45,9 +45,12 @@ Al arrancar, el backend aplica las migraciones (`alembic upgrade head`). El fron
 Todavía no hay login. Arriba a la derecha hay un selector de **usuario de prueba**, con personas ficticias. Elegir una equivale a "entrar" como esa persona.
 
 1. Como empleado (por ejemplo, JUAN PEREZ): **Nueva solicitud** → elegir un formulario → completarlo → **Revisar**. Ahí se ven las advertencias y las novedades que se van a cargar en GMS. Después, **Enviar solicitud**.
-2. Si es un cambio de turno, el compañero elegido lo ve en **Mis solicitudes → Donde participo**.
-3. Todavía no está el circuito de aprobación. Para tener solicitudes aprobadas, ejecutar `docker compose exec backend flask sembrar`, que crea una aprobada de cada tipo.
-4. Como RR.HH. (SOFIA RAMIREZ): **Exportación GMS** → elegir las aprobadas → **Exportar** → **Descargar Excel**. Cada exportación queda registrada y se puede volver a bajar.
+2. Si es un cambio de turno, el compañero elegido (por ejemplo, ANA GOMEZ) lo encuentra en **Por aprobar** y lo acepta o lo rechaza.
+3. El jefe elegido (MARIA LOPEZ o JORGE MARTINEZ) lo aprueba o lo rechaza con motivo desde **Por aprobar**. En el detalle ve las advertencias y las novedades que se van a cargar.
+4. Como RR.HH. (SOFIA RAMIREZ): primero se aprueba desde **Por aprobar** y después se exporta desde **Exportación GMS** → elegir las aprobadas → **Exportar** → **Descargar Excel**.
+5. El empleado y el jefe ven la solicitud como **No cargada** hasta que RR.HH. la exporta y como **Cargada** después. "Exportada a GMS" solo lo ve RR.HH.
+
+Para tener aprobadas sin recorrer el circuito: `docker compose exec backend flask sembrar`.
 
 ## Pruebas y calidad
 
@@ -108,6 +111,6 @@ node scripts/generar-casos-desde-auto-sc.mjs ../proyecto-auto-sc docs
 2. ~~Portar las reglas y el Excel a Python~~ (hecho, Fase 1).
 3. ~~Solicitudes, auditoría, formularios y exportación a Excel~~ (hecho, Fase 2a, con usuario de prueba).
 4. **Login, roles y padrón:** reemplazar `app/identidad.py` y el directorio de prueba.
-5. **Circuito de aprobación:** aceptar, aprobar, rechazar y cancelar, con bandejas para el jefe y RR.HH.
+5. ~~Circuito de aprobación~~ (hecho: aceptar, aprobar y rechazar, con la bandeja "Por aprobar"). Falta cancelar, duplicar y aprobar en lote.
 6. **Adjuntos** de las licencias, cuando se defina el hosting.
 7. **Piloto** con un sector, en paralelo al papel.

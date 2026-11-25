@@ -1,9 +1,11 @@
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { obtenerSolicitud } from '../api/solicitudes';
-import type { Renglon, Solicitud } from '../api/tipos';
-import { EstadoSolicitud, IconoTipo, ListaAdvertencias, Mensaje } from '../componentes/Varios';
+import { obtenerNovedadesPrevistas, obtenerSolicitud } from '../api/solicitudes';
+import type { FilaGms, Renglon, Solicitud } from '../api/tipos';
+import PanelDecision from '../componentes/PanelDecision';
+import { EstadoSolicitud, IconoTipo, ListaAdvertencias, Mensaje, TablaNovedades } from '../componentes/Varios';
+import { useUsuario } from '../contexto/Usuario';
 import { ESTADOS, TIPOS, TIPOS_LICENCIA, formatearFecha, formatearFechaHora } from '../textos';
 
 const ETIQUETAS: Record<string, string> = {
@@ -31,8 +33,13 @@ const ETIQUETAS: Record<string, string> = {
 const ACCIONES: Record<string, string> = {
   crear: 'Creó el borrador',
   enviar: 'Envió la solicitud',
+  aceptar: 'Aceptó el cambio de turno',
+  aprobar: 'Aprobó la solicitud',
+  rechazar: 'Rechazó la solicitud',
   sembrar: 'Aprobada (dato de prueba)',
   exportar: 'Exportó a GMS',
+  // Lo que ven quienes no son RR.HH. en lugar de "exportar".
+  cargar: 'Se cargó la novedad',
 };
 
 function valorLegible(clave: string, valor: unknown): string {
@@ -51,7 +58,9 @@ function valorLegible(clave: string, valor: unknown): string {
 export default function DetalleSolicitud() {
   const { id } = useParams();
   const { state } = useLocation() as { state: { recienEnviada?: boolean } | null };
+  const { usuario } = useUsuario();
   const [solicitud, setSolicitud] = useState<Solicitud | null>(null);
+  const [novedades, setNovedades] = useState<FilaGms[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,6 +68,19 @@ export default function DetalleSolicitud() {
       .then(setSolicitud)
       .catch((e: Error) => setError(e.message));
   }, [id]);
+
+  // El jefe asignado y RR.HH. ven qué novedades va a generar la solicitud.
+  const esAprobador =
+    !!usuario &&
+    !!solicitud &&
+    solicitud.estado !== 'BORRADOR' &&
+    (usuario.roles.includes('rrhh') || solicitud.jefe_legajo === usuario.legajo);
+  useEffect(() => {
+    if (!esAprobador) return;
+    obtenerNovedadesPrevistas(Number(id))
+      .then(setNovedades)
+      .catch(() => setNovedades(null));
+  }, [esAprobador, id]);
 
   if (error) return <Mensaje tipo="error">{error}</Mensaje>;
   if (!solicitud) return <p className="cargando">Cargando…</p>;
@@ -114,6 +136,8 @@ export default function DetalleSolicitud() {
         )}
       </dl>
       {solicitud.estado !== 'BORRADOR' && <ListaAdvertencias advertencias={solicitud.advertencias} />}
+      {novedades && novedades.length > 0 && <TablaNovedades filas={novedades} />}
+      {(solicitud.acciones_disponibles ?? []).length > 0 && <PanelDecision solicitud={solicitud} />}
       <h2>Historial</h2>
       <ol className="historial">
         {(solicitud.auditoria ?? []).map((r, i) => (
@@ -122,7 +146,7 @@ export default function DetalleSolicitud() {
             <span className="historial-detalle">
               {r.usuario.nombre} · {formatearFechaHora(r.creado_en)} · {ESTADOS[r.estado_nuevo]}
             </span>
-            {r.motivo && <div className="motivo">{r.motivo}</div>}
+            {r.motivo && <div className="motivo">Motivo: {r.motivo}</div>}
           </li>
         ))}
       </ol>

@@ -4,11 +4,13 @@ Portal web para que los empleados **soliciten novedades de personal** (retiros/i
 
 Reemplaza a los formularios en papel que hoy se escanean y se leen con IA en `../proyecto-auto-sc` (Node.js, en producción). Los dos sistemas van a convivir durante la transición.
 
-**Estado:** Fase 2a terminada.
+**Estado:** circuito de aprobación terminado.
 - **Fase 1:** el motor de reglas (`app/reglas/`) y el Excel para GMS (`app/excel/`) están portados. Dan idéntico al motor original en los 25 casos.
 - **Fase 2a:** hay solicitudes con auditoría, los 5 formularios web (borrador → revisión con advertencias → envío) y la exportación de las APROBADA a un Excel por lote, que se puede volver a bajar idéntico.
 - **Sin login ni padrón:** hay un **usuario de prueba** elegido en pantalla (header `X-Legajo-Prueba`) y un directorio ficticio en `app/identidad_prueba.py`.
-- **Sin circuito de aprobación:** las solicitudes llegan a APROBADA solo con `flask sembrar`. Tampoco hay adjuntos todavía.
+- **Circuito de aprobación:** el compañero acepta el cambio de turno → el jefe aprueba → RR.HH. aprueba. Cualquiera de los tres puede rechazar con motivo. Cada uno decide desde la bandeja "Por aprobar" (`/bandeja`) y el detalle de la solicitud.
+- **Visibilidad:** solo RR.HH. ve "Aprobada" y "Exportada a GMS". El resto ve "No cargada" o "Cargada". Esto lo traduce el backend (`app/solicitudes/visibilidad.py`), así que el estado real no viaja en la respuesta.
+- **Pendiente:** cancelar, duplicar una rechazada, aprobación en lote, notificaciones y adjuntos. `flask sembrar` sigue disponible para cargar aprobadas rápido.
 
 Para el desarrollo, usar el agente **`fullstack-dev`** (`.claude/agents/fullstack-dev.md`).
 
@@ -47,7 +49,9 @@ backend/
   app/errores.py       ErrorApi / ErrorValidacion → {"codigo","mensaje","errores"}
   app/identidad.py     usuario_actual(), buscar_persona, listar_jefes: el punto a reemplazar por login y padrón
   app/modelos/         Solicitud, RegistroAuditoria, LoteExportacion, Novedad (importarlos en __init__)
-  app/solicitudes/     validacion.py (JSON → entradas del motor), servicio.py (borrador, envío, consulta)
+  app/solicitudes/     validacion.py (JSON → entradas del motor), servicio.py (borrador, envío, consulta,
+                       aprobar/rechazar, bandeja), circuito.py (quién tiene el paso; puro),
+                       visibilidad.py (estado que ve cada uno; puro)
   app/exportacion/     servicio.py: lote todo-o-nada, APROBADA → EXPORTADA, Excel desde las novedades guardadas
   app/reglas/          motor de reglas: generar_filas(solicitud, hoy) → list[FilaNovedad]
                        (entradas.py: solicitudes tipadas; una regla por formulario; motivos.py: textos;
@@ -61,7 +65,8 @@ frontend/src/
   contexto/Usuario.tsx usuario de prueba elegido en pantalla
   componentes/         campos, renglones, selector de jefe, buscador de compañero, advertencias, tabla GMS
   formularios/         un componente por tipo de solicitud
-  paginas/             MisSolicitudes, NuevaSolicitud, DetalleSolicitud, ExportacionRrhh, EstadoSistema
+  paginas/             MisSolicitudes, NuevaSolicitud, DetalleSolicitud (con PanelDecision), Bandeja,
+                       ExportacionRrhh, EstadoSistema
   pruebas/             simularApi() y renderizarApp() para los tests
   textos.ts            nombres, estados, tipos de licencia y formato de fechas
 docs/                  especificación, reglas heredadas, casos de prueba, Excel de referencia
@@ -105,6 +110,9 @@ No avanzar con login ni padrón sin estas respuestas de RR.HH. y Sistemas. Pregu
 - **Hosting de producción:** probablemente Google Cloud Run + Cloud SQL, como `proyecto-auto-sc`, pero no está decidido. De esto depende dónde se guardan los adjuntos.
 
 Supuestos provisorios que ya están en el código (cambiarlos cuando RR.HH. decida):
+- En el cambio de turno aprueba **un solo jefe**: el que eligió el solicitante.
+- El rechazo es **final** y lleva un motivo de 5 a 500 caracteres. Las solicitudes **no vencen**.
+- Nadie aprueba su propia solicitud, ni siquiera alguien de RR.HH.
 - AnioNovedad y mesNovedad salen de la **fecha de exportación**.
 - No hay advertencia CT-1: la matriz de campos y el motor permiten devolver el cambio de turno el mismo día.
 - La integración con GMS es un Excel por lote que RR.HH. importa a mano. El estado final es `EXPORTADA`.

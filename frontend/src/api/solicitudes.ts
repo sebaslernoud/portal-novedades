@@ -1,5 +1,14 @@
 import { pedir } from './cliente';
-import type { CuerpoSolicitud, ListaSolicitudes, Previsualizacion, Solicitud } from './tipos';
+import type { Bandeja, CuerpoSolicitud, FilaGms, ListaSolicitudes, Previsualizacion, Solicitud } from './tipos';
+
+export const obtenerBandeja = () => pedir<Bandeja>('/bandeja');
+
+export const aprobarSolicitud = (id: number) => pedir<Solicitud>(`/solicitudes/${id}/aprobar`, 'POST');
+
+export const rechazarSolicitud = (id: number, motivo: string) =>
+  pedir<Solicitud>(`/solicitudes/${id}/rechazar`, 'POST', { motivo });
+
+export const obtenerNovedadesPrevistas = (id: number) => pedir<FilaGms[]>(`/solicitudes/${id}/novedades`);
 
 export const previsualizar = (cuerpo: CuerpoSolicitud) =>
   pedir<Previsualizacion>('/solicitudes/previsualizar', 'POST', cuerpo);

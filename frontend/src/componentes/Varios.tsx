@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { EstadoSolicitud as Estado, FilaGms, TipoSolicitud } from '../api/tipos';
+import type { EstadoVisible as Estado, FilaGms, TipoSolicitud } from '../api/tipos';
 import { ESTADOS, TIPOS, formatearFecha } from '../textos';
 
 type TipoMensaje = 'error' | 'info' | 'exito';
@@ -63,6 +63,8 @@ export function ListaAdvertencias({ advertencias }: { advertencias: string[] }) 
 }
 
 const ICONO_ESTADO: Record<Estado, LucideIcon> = {
+  NO_CARGADA: Hourglass,
+  CARGADA: FileCheck2,
   BORRADOR: FilePen,
   PENDIENTE_COMPANERO: Hourglass,
   PENDIENTE_JEFE: Hourglass,

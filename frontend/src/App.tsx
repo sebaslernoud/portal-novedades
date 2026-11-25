@@ -1,5 +1,7 @@
-import { ClipboardList, FilePlus2, FileSpreadsheet, HeartPulse } from 'lucide-react';
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { ClipboardList, FilePlus2, FileSpreadsheet, HeartPulse, ListChecks } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { obtenerBandeja } from './api/solicitudes';
 import SelectorUsuarioPrueba from './componentes/SelectorUsuarioPrueba';
 import { Mensaje } from './componentes/Varios';
 import { useUsuario } from './contexto/Usuario';
@@ -7,11 +9,30 @@ import DetalleSolicitud from './paginas/DetalleSolicitud';
 import EstadoSistema from './paginas/EstadoSistema';
 import ExportacionRrhh from './paginas/ExportacionRrhh';
 import MisSolicitudes from './paginas/MisSolicitudes';
+import Bandeja from './paginas/Bandeja';
 import NuevaSolicitud from './paginas/NuevaSolicitud';
+
+// Cantidad de solicitudes que esperan una decisión del usuario. Se actualiza al cambiar de pantalla.
+function usePendientes(legajo: number | null): number {
+  const { pathname } = useLocation();
+  const [cantidad, setCantidad] = useState(0);
+  useEffect(() => {
+    if (legajo === null) return;
+    let vigente = true;
+    obtenerBandeja()
+      .then((b) => vigente && setCantidad(b.companero.length + b.jefe.length + b.rrhh.length))
+      .catch(() => vigente && setCantidad(0));
+    return () => {
+      vigente = false;
+    };
+  }, [legajo, pathname]);
+  return legajo === null ? 0 : cantidad;
+}
 
 export default function App() {
   const { usuario, cargando, error } = useUsuario();
   const esRrhh = usuario?.roles.includes('rrhh') ?? false;
+  const pendientes = usePendientes(usuario?.legajo ?? null);
 
   return (
     <>
@@ -35,6 +56,15 @@ export default function App() {
               <NavLink to="/nueva">
                 <FilePlus2 aria-hidden="true" size={18} />
                 Nueva solicitud
+              </NavLink>
+              <NavLink to="/bandeja">
+                <ListChecks aria-hidden="true" size={18} />
+                Por aprobar
+                {pendientes > 0 && (
+                  <span className="contador" aria-label={`${pendientes} pendientes`}>
+                    {pendientes}
+                  </span>
+                )}
               </NavLink>
               {esRrhh && (
                 <NavLink to="/exportacion">
@@ -65,6 +95,7 @@ export default function App() {
           <Routes key={usuario.legajo}>
             <Route path="/" element={<MisSolicitudes />} />
             <Route path="/nueva" element={<NuevaSolicitud />} />
+            <Route path="/bandeja" element={<Bandeja />} />
             <Route path="/solicitudes/:id" element={<DetalleSolicitud />} />
             <Route path="/solicitudes/:id/editar" element={<NuevaSolicitud />} />
             <Route path="/exportacion" element={esRrhh ? <ExportacionRrhh /> : <p>Solo para RR.HH.</p>} />
