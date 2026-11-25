@@ -1,5 +1,6 @@
 // Campos de formulario con etiqueta, marca de obligatorio y error del backend.
 // Fechas y horas usan los selectores nativos: no se pueden escribir formatos inválidos.
+import { CircleAlert } from 'lucide-react';
 import { useId, type ReactNode } from 'react';
 
 type PropsBase = {
@@ -9,20 +10,36 @@ type PropsBase = {
   ayuda?: string;
 };
 
+// El texto " *" forma parte de la etiqueta visible; los lectores de pantalla usan `required`.
+export const MarcaObligatorio = () => (
+  <span className="obligatorio" aria-hidden="true">
+    {' *'}
+  </span>
+);
+
+export function ErrorCampo({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <small id={id} className="error-campo" role="alert">
+      <CircleAlert aria-hidden="true" size={14} />
+      {children}
+    </small>
+  );
+}
+
 function Envoltorio({ id, etiqueta, error, obligatorio, ayuda, children }: PropsBase & { id: string; children: ReactNode }) {
   return (
     <div className={`campo${error ? ' campo-con-error' : ''}`}>
       <label htmlFor={id}>
         {etiqueta}
-        {obligatorio && <span aria-hidden="true"> *</span>}
+        {obligatorio && <MarcaObligatorio />}
       </label>
       {children}
-      {ayuda && <small id={`${id}-ayuda`}>{ayuda}</small>}
-      {error && (
-        <small id={`${id}-error`} className="error" role="alert">
-          {error}
+      {ayuda && (
+        <small id={`${id}-ayuda`} className="ayuda">
+          {ayuda}
         </small>
       )}
+      {error && <ErrorCampo id={`${id}-error`}>{error}</ErrorCampo>}
     </div>
   );
 }
@@ -97,7 +114,7 @@ export function CampoOpciones({ opciones, destacado, ...props }: PropsSelector &
     <fieldset className={clases.filter(Boolean).join(' ')} aria-required={props.obligatorio}>
       <legend>
         {props.etiqueta}
-        {props.obligatorio && <span aria-hidden="true"> *</span>}
+        {props.obligatorio && <MarcaObligatorio />}
       </legend>
       <div className="opciones">
         {opciones.map((o) => (
@@ -114,11 +131,7 @@ export function CampoOpciones({ opciones, destacado, ...props }: PropsSelector &
           </label>
         ))}
       </div>
-      {props.error && (
-        <small className="error" role="alert">
-          {props.error}
-        </small>
-      )}
+      {props.error && <ErrorCampo>{props.error}</ErrorCampo>}
     </fieldset>
   );
 }

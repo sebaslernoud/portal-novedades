@@ -1,11 +1,14 @@
+import { UserRound } from 'lucide-react';
 import { useUsuario } from '../contexto/Usuario';
 
 export default function SelectorUsuarioPrueba() {
   const { usuario, personas, elegir } = useUsuario();
   return (
     <div className="usuario-prueba">
-      <label>
-        <span className="marca-prueba">Modo prueba</span> Usuario
+      <span className="marca-prueba">Modo prueba</span>
+      <label className="selector-usuario">
+        <UserRound aria-hidden="true" size={18} />
+        <span className="solo-lectores">Usuario</span>
         <select
           value={usuario?.legajo ?? ''}
           onChange={(e) => elegir(e.target.value ? Number(e.target.value) : null)}

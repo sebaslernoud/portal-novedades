@@ -1,8 +1,9 @@
+import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { obtenerSolicitud } from '../api/solicitudes';
 import type { Renglon, Solicitud } from '../api/tipos';
-import { EstadoSolicitud, ListaAdvertencias } from '../componentes/Varios';
+import { EstadoSolicitud, IconoTipo, ListaAdvertencias, Mensaje } from '../componentes/Varios';
 import { ESTADOS, TIPOS, TIPOS_LICENCIA, formatearFecha, formatearFechaHora } from '../textos';
 
 const ETIQUETAS: Record<string, string> = {
@@ -59,8 +60,8 @@ export default function DetalleSolicitud() {
       .catch((e: Error) => setError(e.message));
   }, [id]);
 
-  if (error) return <p className="error">{error}</p>;
-  if (!solicitud) return <p>Cargando…</p>;
+  if (error) return <Mensaje tipo="error">{error}</Mensaje>;
+  if (!solicitud) return <p className="cargando">Cargando…</p>;
 
   const datos = Object.entries(solicitud.datos).filter(
     ([clave, valor]) => clave !== 'companero_legajo' && valor !== '' && valor !== null && !(Array.isArray(valor) && !valor.length),
@@ -68,17 +69,19 @@ export default function DetalleSolicitud() {
 
   return (
     <section>
-      <Link to="/">← Mis solicitudes</Link>
-      {state?.recienEnviada && (
-        <p className="aviso" role="status">
-          ¡Listo! La solicitud se envió.
-        </p>
-      )}
+      <Link to="/" className="volver">
+        <ArrowLeft aria-hidden="true" size={16} />
+        Mis solicitudes
+      </Link>
+      {state?.recienEnviada && <Mensaje tipo="exito">¡Listo! La solicitud se envió.</Mensaje>}
       <div className="encabezado-seccion">
-        <h1>{TIPOS[solicitud.tipo].nombre}</h1>
+        <div className="encabezado-tipo">
+          <IconoTipo tipo={solicitud.tipo} tamano="grande" />
+          <h1>{TIPOS[solicitud.tipo].nombre}</h1>
+        </div>
         <EstadoSolicitud estado={solicitud.estado} />
       </div>
-      <dl className="datos">
+      <dl className="datos tarjeta">
         <dt>Solicitante</dt>
         <dd>
           {solicitud.solicitante.nombre} ({solicitud.solicitante.legajo})
@@ -114,9 +117,11 @@ export default function DetalleSolicitud() {
       <h2>Historial</h2>
       <ol className="historial">
         {(solicitud.auditoria ?? []).map((r, i) => (
-          <li key={i}>
-            <strong>{ACCIONES[r.accion] ?? r.accion}</strong> · {r.usuario.nombre} ·{' '}
-            {formatearFechaHora(r.creado_en)} · {ESTADOS[r.estado_nuevo]}
+          <li key={i} className={`historial-${r.estado_nuevo.toLowerCase()}`}>
+            <strong>{ACCIONES[r.accion] ?? r.accion}</strong>
+            <span className="historial-detalle">
+              {r.usuario.nombre} · {formatearFechaHora(r.creado_en)} · {ESTADOS[r.estado_nuevo]}
+            </span>
             {r.motivo && <div className="motivo">{r.motivo}</div>}
           </li>
         ))}
