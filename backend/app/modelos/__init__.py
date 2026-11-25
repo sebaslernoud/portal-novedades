@@ -1,10 +1,25 @@
 """Modelos de SQLAlchemy.
 
 Importar acá cada módulo de modelos nuevo para que Alembic los vea al generar migraciones
-(`alembic revision --autogenerate`). Todavía no hay modelos de negocio: se definen cuando se
-resuelva la Fase 0 (ver CLAUDE.md).
+(`alembic revision --autogenerate`).
 """
 
 from app.db import Base
+from app.modelos.solicitud import (
+    EstadoSolicitud,
+    LoteExportacion,
+    Novedad,
+    RegistroAuditoria,
+    Solicitud,
+    TipoSolicitud,
+)
 
-__all__ = ["Base"]
+__all__ = [
+    "Base",
+    "EstadoSolicitud",
+    "LoteExportacion",
+    "Novedad",
+    "RegistroAuditoria",
+    "Solicitud",
+    "TipoSolicitud",
+]

@@ -4,7 +4,7 @@ Web para que los empleados soliciten **licencias especiales, francos, cambios de
 
 Reemplaza a los formularios en papel que hoy se escanean y se procesan con IA en [proyecto-auto-sc](../proyecto-auto-sc). Hereda de ese proyecto todas las reglas de negocio: cómo se calculan las novedades, los textos de Observaciones y el formato del Excel.
 
-> **Estado:** el entorno corre con Docker y el motor de reglas y el Excel para GMS ya están portados de `proyecto-auto-sc` (25/25 casos idénticos). Los formularios, el login, el circuito y el endpoint de exportación se desarrollan a partir de acá.
+> **Estado:** ya están el motor de reglas y el Excel para GMS, portados de `proyecto-auto-sc` (25/25 casos idénticos), los 5 formularios web con sus advertencias y la exportación de las aprobadas. Faltan el login, el padrón, el circuito de aprobación y los adjuntos, que dependen de definiciones de RR.HH. y Sistemas.
 
 ---
 
@@ -39,6 +39,15 @@ Al arrancar, el backend aplica las migraciones (`alembic upgrade head`). El fron
 
 - Frontend y backend se recargan solos al guardar cambios.
 - Para bajar todo: `docker compose down`. Para borrar también la base local: `docker compose down -v`.
+
+## Probarlo de punta a punta
+
+Todavía no hay login. Arriba a la derecha hay un selector de **usuario de prueba**, con personas ficticias. Elegir una equivale a "entrar" como esa persona.
+
+1. Como empleado (por ejemplo, JUAN PEREZ): **Nueva solicitud** → elegir un formulario → completarlo → **Revisar**. Ahí se ven las advertencias y las novedades que se van a cargar en GMS. Después, **Enviar solicitud**.
+2. Si es un cambio de turno, el compañero elegido lo ve en **Mis solicitudes → Donde participo**.
+3. Todavía no está el circuito de aprobación. Para tener solicitudes aprobadas, ejecutar `docker compose exec backend flask sembrar`, que crea una aprobada de cada tipo.
+4. Como RR.HH. (SOFIA RAMIREZ): **Exportación GMS** → elegir las aprobadas → **Exportar** → **Descargar Excel**. Cada exportación queda registrada y se puede volver a bajar.
 
 ## Pruebas y calidad
 
@@ -96,9 +105,9 @@ node scripts/generar-casos-desde-auto-sc.mjs ../proyecto-auto-sc docs
    - Origen del padrón de empleados y jefes.
    - Puntos abiertos de la especificación.
    El detalle está en `CLAUDE.md`.
-2. **Portar las reglas y el Excel a Python**, con los casos de prueba en verde. No depende de la Fase 0, así que se puede empezar ya.
-3. **Modelos y migraciones:** empleados, solicitudes, aprobaciones y auditoría.
-4. **Login y roles:** empleado, jefe y RR.HH.
-5. **Formularios y circuito de aprobación:** bandejas por rol.
-6. **Exportación a Excel** desde la bandeja de RR.HH., marcando las solicitudes como exportadas.
+2. ~~Portar las reglas y el Excel a Python~~ (hecho, Fase 1).
+3. ~~Solicitudes, auditoría, formularios y exportación a Excel~~ (hecho, Fase 2a, con usuario de prueba).
+4. **Login, roles y padrón:** reemplazar `app/identidad.py` y el directorio de prueba.
+5. **Circuito de aprobación:** aceptar, aprobar, rechazar y cancelar, con bandejas para el jefe y RR.HH.
+6. **Adjuntos** de las licencias, cuando se defina el hosting.
 7. **Piloto** con un sector, en paralelo al papel.
