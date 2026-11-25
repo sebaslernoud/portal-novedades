@@ -1,4 +1,5 @@
 // Elegir formulario → completar → revisar advertencias y novedades → guardar borrador o enviar.
+import { ArrowLeft, Eye, LoaderCircle, Save, Send } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorApi } from '../api/cliente';
@@ -6,11 +7,32 @@ import { crearBorrador, editarBorrador, enviarSolicitud, obtenerSolicitud, previ
 import type { CuerpoSolicitud, DatosPorTipo, Errores, Previsualizacion, TipoSolicitud } from '../api/tipos';
 import { CampoTexto } from '../componentes/Campos';
 import SelectorJefe from '../componentes/SelectorJefe';
-import { ListaAdvertencias, TablaNovedades } from '../componentes/Varios';
+import { IconoTipo, ListaAdvertencias, Mensaje, TablaNovedades } from '../componentes/Varios';
 import { FormularioDeTipo } from '../formularios';
 import { TIPOS, datosIniciales } from '../textos';
 
 type Datos = DatosPorTipo[TipoSolicitud];
+type Aviso = { tipo: 'error' | 'exito'; texto: string };
+
+// Mientras una acción está en curso, el ícono del botón pasa a ser un spinner.
+const IconoAccion = ({ ocupado, Icono }: { ocupado: boolean; Icono: typeof Send }) =>
+  ocupado ? (
+    <LoaderCircle aria-hidden="true" size={18} className="girando" />
+  ) : (
+    <Icono aria-hidden="true" size={18} />
+  );
+
+function EncabezadoTipo({ tipo, titulo }: { tipo: TipoSolicitud; titulo?: string }) {
+  return (
+    <div className="encabezado-tipo">
+      <IconoTipo tipo={tipo} tamano="grande" />
+      <div>
+        {titulo && <p className="subtitulo">{TIPOS[tipo].nombre}</p>}
+        <h1>{titulo ?? TIPOS[tipo].nombre}</h1>
+      </div>
+    </div>
+  );
+}
 
 export default function NuevaSolicitud() {
   const { id } = useParams();
@@ -21,7 +43,7 @@ export default function NuevaSolicitud() {
   const [jefe, setJefe] = useState<number | null>(null);
   const [comentario, setComentario] = useState('');
   const [errores, setErrores] = useState<Errores>({});
-  const [mensaje, setMensaje] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<Aviso | null>(null);
   const [revision, setRevision] = useState<Previsualizacion | null>(null);
   const [ocupado, setOcupado] = useState(false);
 
@@ -38,14 +60,14 @@ export default function NuevaSolicitud() {
         setJefe(s.jefe_legajo);
         setComentario(s.comentario ?? '');
       })
-      .catch((e: Error) => setMensaje(e.message));
+      .catch((e: Error) => setAviso({ tipo: 'error', texto: e.message }));
   }, [id, navegar]);
 
   const elegirTipo = (nuevo: TipoSolicitud) => {
     setTipo(nuevo);
     setDatos(datosIniciales(nuevo));
     setErrores({});
-    setMensaje(null);
+    setAviso(null);
   };
 
   const cambiarDatos = (parcial: Partial<Datos>) => {
@@ -55,34 +77,42 @@ export default function NuevaSolicitud() {
 
   const ejecutar = async (accion: () => Promise<void>) => {
     setOcupado(true);
-    setMensaje(null);
+    setAviso(null);
     try {
       await accion();
     } catch (e) {
       if (e instanceof ErrorApi) {
         setErrores(e.porCampo());
-        setMensaje(e.message);
+        setAviso({ tipo: 'error', texto: e.message });
       } else {
-        setMensaje('No se pudo conectar con el servidor. Probá de nuevo.');
+        setAviso({ tipo: 'error', texto: 'No se pudo conectar con el servidor. Probá de nuevo.' });
       }
     } finally {
       setOcupado(false);
     }
   };
 
+  const mensaje = aviso && <Mensaje tipo={aviso.tipo}>{aviso.texto}</Mensaje>;
+
   if (!tipo || !datos) {
     return (
       <section>
         <h1>Nueva solicitud</h1>
-        {mensaje && <p className="error">{mensaje}</p>}
-        <p>¿Qué querés pedir?</p>
+        {mensaje}
+        <p className="subtitulo">¿Qué querés pedir?</p>
         <div className="grilla-tipos">
-          {(Object.keys(TIPOS) as TipoSolicitud[]).map((t) => (
-            <button key={t} type="button" className="tarjeta-tipo" onClick={() => elegirTipo(t)}>
-              <strong>{TIPOS[t].nombre}</strong>
-              <span>{TIPOS[t].descripcion}</span>
-            </button>
-          ))}
+          {(Object.keys(TIPOS) as TipoSolicitud[]).map((t) => {
+            const { nombre, descripcion, icono: Icono, color } = TIPOS[t];
+            return (
+              <button key={t} type="button" className={`tarjeta-tipo fondo-${color}`} onClick={() => elegirTipo(t)}>
+                <span className="tarjeta-tipo-icono" aria-hidden="true">
+                  <Icono size={28} />
+                </span>
+                <strong>{nombre}</strong>
+                <span>{descripcion}</span>
+              </button>
+            );
+          })}
         </div>
       </section>
     );
@@ -99,27 +129,30 @@ export default function NuevaSolicitud() {
   if (revision) {
     return (
       <section>
-        <h1>Revisá tu solicitud</h1>
-        <p className="subtitulo">{TIPOS[tipo].nombre}</p>
-        {mensaje && <p className="error">{mensaje}</p>}
-        <ListaAdvertencias advertencias={revision.advertencias} />
-        <TablaNovedades filas={revision.novedades} />
-        <div className="acciones">
-          <button type="button" className="boton-secundario" onClick={() => setRevision(null)} disabled={ocupado}>
-            Volver a editar
-          </button>
-          <button
-            type="button"
-            disabled={ocupado}
-            onClick={() =>
-              ejecutar(async () => {
-                const enviada = await enviarSolicitud(await guardar());
-                navegar(`/solicitudes/${enviada.id}`, { state: { recienEnviada: true } });
-              })
-            }
-          >
-            Enviar solicitud
-          </button>
+        <EncabezadoTipo tipo={tipo} titulo="Revisá tu solicitud" />
+        {mensaje}
+        <div className="tarjeta">
+          <ListaAdvertencias advertencias={revision.advertencias} />
+          <TablaNovedades filas={revision.novedades} />
+          <div className="acciones">
+            <button type="button" className="boton-secundario" onClick={() => setRevision(null)} disabled={ocupado}>
+              <ArrowLeft aria-hidden="true" size={18} />
+              Volver a editar
+            </button>
+            <button
+              type="button"
+              disabled={ocupado}
+              onClick={() =>
+                ejecutar(async () => {
+                  const enviada = await enviarSolicitud(await guardar());
+                  navegar(`/solicitudes/${enviada.id}`, { state: { recienEnviada: true } });
+                })
+              }
+            >
+              <IconoAccion ocupado={ocupado} Icono={Send} />
+              Enviar solicitud
+            </button>
+          </div>
         </div>
       </section>
     );
@@ -127,9 +160,10 @@ export default function NuevaSolicitud() {
 
   return (
     <section>
-      <h1>{TIPOS[tipo].nombre}</h1>
+      <EncabezadoTipo tipo={tipo} />
       {!borradorId && (
         <button type="button" className="enlace" onClick={() => setTipo(null)}>
+          <ArrowLeft aria-hidden="true" size={16} />
           Elegir otro formulario
         </button>
       )}
@@ -145,6 +179,7 @@ export default function NuevaSolicitud() {
         }}
       >
         <FormularioDeTipo tipo={tipo} datos={datos} errores={errores} cambiar={cambiarDatos} />
+        <div className="separador" />
         <SelectorJefe
           valor={jefe}
           excluir={companero}
@@ -162,11 +197,7 @@ export default function NuevaSolicitud() {
           error={errores['comentario']}
           alCambiar={setComentario}
         />
-        {mensaje && (
-          <p className={Object.keys(errores).length ? 'error' : 'aviso'} role="status">
-            {mensaje}
-          </p>
-        )}
+        {mensaje}
         <div className="acciones">
           <button
             type="button"
@@ -176,13 +207,15 @@ export default function NuevaSolicitud() {
               ejecutar(async () => {
                 await guardar();
                 setErrores({});
-                setMensaje('Borrador guardado.');
+                setAviso({ tipo: 'exito', texto: 'Borrador guardado.' });
               })
             }
           >
+            <Save aria-hidden="true" size={18} />
             Guardar borrador
           </button>
           <button type="submit" disabled={ocupado}>
+            <IconoAccion ocupado={ocupado} Icono={Eye} />
             Revisar
           </button>
         </div>

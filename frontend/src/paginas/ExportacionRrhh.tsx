@@ -1,10 +1,22 @@
 // RR.HH.: exportar las solicitudes aprobadas al Excel de GMS y volver a bajar exportaciones anteriores.
+import { Download, FileCheck2, FileSpreadsheet, ListChecks, LoaderCircle, SquareCheckBig } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ErrorApi } from '../api/cliente';
 import { descargarExcel, exportar, listarLotes, listarPendientesDeExportar } from '../api/exportaciones';
 import type { ErrorCampo, Lote, Solicitud } from '../api/tipos';
+import { IconoTipo, Mensaje } from '../componentes/Varios';
 import { TIPOS, formatearFecha, formatearFechaHora } from '../textos';
+
+function Indicador({ valor, texto, Icono, color }: { valor: number; texto: string; Icono: typeof Download; color: string }) {
+  return (
+    <div className={`indicador indicador-${color}`}>
+      <Icono aria-hidden="true" size={22} />
+      <span className="indicador-valor">{valor}</span>
+      <span className="indicador-texto">{texto}</span>
+    </div>
+  );
+}
 
 export default function ExportacionRrhh() {
   const [pendientes, setPendientes] = useState<Solicitud[] | null>(null);
@@ -56,12 +68,27 @@ export default function ExportacionRrhh() {
 
   return (
     <section>
-      <h1>Exportación a GMS</h1>
-      <p className="subtitulo">
-        Las solicitudes aprobadas se exportan al Excel de carga masiva. AnioNovedad y mesNovedad toman la fecha de hoy.
-      </p>
+      <div className="encabezado-tipo">
+        <span className="icono-tipo icono-tipo-grande fondo-azul" aria-hidden="true">
+          <FileSpreadsheet size={28} />
+        </span>
+        <div>
+          <h1>Exportación a GMS</h1>
+          <p className="subtitulo">
+            Las solicitudes aprobadas se exportan al Excel de carga masiva. AnioNovedad y mesNovedad toman la fecha de
+            hoy.
+          </p>
+        </div>
+      </div>
+
+      <div className="indicadores">
+        <Indicador valor={pendientes?.length ?? 0} texto="aprobadas sin exportar" Icono={ListChecks} color="turquesa" />
+        <Indicador valor={seleccion.size} texto="seleccionadas" Icono={SquareCheckBig} color="celeste" />
+        <Indicador valor={lotes.length} texto="exportaciones hechas" Icono={FileCheck2} color="azul" />
+      </div>
+
       {mensaje && (
-        <div className="error" role="alert">
+        <Mensaje tipo="error">
           <p>{mensaje}</p>
           {errores.length > 0 && (
             <ul>
@@ -72,33 +99,35 @@ export default function ExportacionRrhh() {
               ))}
             </ul>
           )}
-        </div>
+        </Mensaje>
       )}
       {ultimo && (
-        <div className="aviso" role="status">
+        <Mensaje tipo="exito">
           Se exportaron {ultimo.cantidad_solicitudes} solicitudes ({ultimo.cantidad_filas} novedades).{' '}
           <button type="button" className="enlace" onClick={() => bajar(ultimo)}>
+            <Download aria-hidden="true" size={16} />
             Descargar {ultimo.nombre_archivo}
           </button>
-        </div>
+        </Mensaje>
       )}
 
       <h2>Aprobadas sin exportar</h2>
-      {pendientes === null && <p>Cargando…</p>}
-      {pendientes?.length === 0 && <p>No hay solicitudes aprobadas pendientes de exportar.</p>}
+      {pendientes === null && <p className="cargando">Cargando…</p>}
+      {pendientes?.length === 0 && <p className="vacio-linea">No hay solicitudes aprobadas pendientes de exportar.</p>}
       {pendientes && pendientes.length > 0 && (
         <>
           <ul className="lista-solicitudes">
             {pendientes.map((s) => (
-              <li key={s.id}>
-                <label className="casilla">
+              <li key={s.id} className={`item-solicitud${seleccion.has(s.id) ? ' item-seleccionado' : ''}`}>
+                <label className="casilla casilla-grande">
                   <input
                     type="checkbox"
                     checked={seleccion.has(s.id)}
                     onChange={() => alternar(s.id)}
                     aria-label={`Exportar solicitud ${s.id}`}
                   />
-                  <span>
+                  <IconoTipo tipo={s.tipo} />
+                  <span className="item-texto">
                     <strong>{TIPOS[s.tipo].nombre}</strong>
                     <span className="detalle-lista">
                       {s.solicitante.nombre} ({s.solicitante.legajo}) · enviada el {formatearFecha(s.enviada_en)}
@@ -106,7 +135,9 @@ export default function ExportacionRrhh() {
                     </span>
                   </span>
                 </label>
-                <Link to={`/solicitudes/${s.id}`}>Ver</Link>
+                <Link to={`/solicitudes/${s.id}`} className="enlace-ver">
+                  Ver
+                </Link>
               </li>
             ))}
           </ul>
@@ -121,12 +152,18 @@ export default function ExportacionRrhh() {
                   Cancelar
                 </button>
                 <button type="button" onClick={confirmar} disabled={ocupado}>
+                  {ocupado ? (
+                    <LoaderCircle aria-hidden="true" size={18} className="girando" />
+                  ) : (
+                    <FileSpreadsheet aria-hidden="true" size={18} />
+                  )}
                   Confirmar exportación
                 </button>
               </div>
             </div>
           ) : (
             <button type="button" disabled={seleccion.size === 0} onClick={() => setConfirmando(true)}>
+              <FileSpreadsheet aria-hidden="true" size={18} />
               Exportar {seleccion.size} solicitudes
             </button>
           )}
@@ -135,7 +172,7 @@ export default function ExportacionRrhh() {
 
       <h2>Exportaciones anteriores</h2>
       {lotes.length === 0 ? (
-        <p>Todavía no hay exportaciones.</p>
+        <p className="vacio-linea">Todavía no hay exportaciones.</p>
       ) : (
         <div className="tabla-desplazable">
           <table>
@@ -156,7 +193,8 @@ export default function ExportacionRrhh() {
                   <td>{lote.cantidad_solicitudes}</td>
                   <td>{lote.cantidad_filas}</td>
                   <td>
-                    <button type="button" className="enlace" onClick={() => bajar(lote)}>
+                    <button type="button" className="boton-secundario boton-chico" onClick={() => bajar(lote)}>
+                      <Download aria-hidden="true" size={16} />
                       Descargar Excel
                     </button>
                   </td>

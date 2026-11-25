@@ -1,21 +1,50 @@
-// Textos para mostrar y valores iniciales de cada formulario.
+// Textos para mostrar, ícono y color de cada formulario, y valores iniciales.
+import {
+  ArrowLeftRight,
+  CalendarCheck2,
+  CalendarHeart,
+  Clock3,
+  Stethoscope,
+  type LucideIcon,
+} from 'lucide-react';
 import type { DatosPorTipo, EstadoSolicitud, TipoSolicitud } from './api/tipos';
 
-export const TIPOS: Record<TipoSolicitud, { nombre: string; descripcion: string }> = {
+// Colores de la paleta (ver estilos.css). El rojo no está: queda para errores y alertas.
+export type ColorPaleta = 'turquesa' | 'celeste' | 'lima' | 'amarillo' | 'azul';
+
+type DefinicionTipo = { nombre: string; descripcion: string; icono: LucideIcon; color: ColorPaleta };
+
+export const TIPOS: Record<TipoSolicitud, DefinicionTipo> = {
   retiro_ingreso: {
     nombre: 'Retiro / ingreso fuera de horario',
     descripcion: 'Retirarte antes o entrar después de hora un día, y devolver ese tiempo.',
+    icono: Clock3,
+    color: 'turquesa',
   },
   licencia_especial: {
     nombre: 'Licencia especial',
     descripcion: 'Matrimonio, nacimiento, examen, mudanza y otras licencias.',
+    icono: Stethoscope,
+    color: 'celeste',
   },
   franco_compensatorio: {
     nombre: 'Franco compensatorio',
     descripcion: 'Un franco a cambio de tareas adicionales que hiciste o vas a hacer.',
+    icono: CalendarCheck2,
+    color: 'lima',
   },
-  franco_autorizado: { nombre: 'Franco autorizado', descripcion: 'Un franco un día puntual, sin compensar horas.' },
-  cambio_turno: { nombre: 'Cambio de turno', descripcion: 'Intercambiar un turno con un compañero.' },
+  franco_autorizado: {
+    nombre: 'Franco autorizado',
+    descripcion: 'Un franco un día puntual, sin compensar horas.',
+    icono: CalendarHeart,
+    color: 'amarillo',
+  },
+  cambio_turno: {
+    nombre: 'Cambio de turno',
+    descripcion: 'Intercambiar un turno con un compañero.',
+    icono: ArrowLeftRight,
+    color: 'azul',
+  },
 };
 
 export const ESTADOS: Record<EstadoSolicitud, string> = {

@@ -1,5 +1,7 @@
+import { ClipboardList, FilePlus2, FileSpreadsheet, HeartPulse } from 'lucide-react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import SelectorUsuarioPrueba from './componentes/SelectorUsuarioPrueba';
+import { Mensaje } from './componentes/Varios';
 import { useUsuario } from './contexto/Usuario';
 import DetalleSolicitud from './paginas/DetalleSolicitud';
 import EstadoSistema from './paginas/EstadoSistema';
@@ -15,27 +17,47 @@ export default function App() {
     <>
       <header className="encabezado">
         <div className="contenedor encabezado-interno">
-          <strong className="marca">Portal de Novedades</strong>
-          {usuario && (
-            <nav aria-label="Principal">
-              <NavLink to="/" end>
-                Mis solicitudes
-              </NavLink>
-              <NavLink to="/nueva">Nueva solicitud</NavLink>
-              {esRrhh && <NavLink to="/exportacion">Exportación GMS</NavLink>}
-            </nav>
-          )}
+          <span className="marca">
+            <HeartPulse aria-hidden="true" size={30} className="marca-icono" />
+            <span className="marca-texto">
+              Portal de <strong>Novedades</strong>
+            </span>
+          </span>
           <SelectorUsuarioPrueba />
         </div>
+        {usuario && (
+          <nav className="menu" aria-label="Principal">
+            <div className="contenedor menu-interno">
+              <NavLink to="/" end>
+                <ClipboardList aria-hidden="true" size={18} />
+                Mis solicitudes
+              </NavLink>
+              <NavLink to="/nueva">
+                <FilePlus2 aria-hidden="true" size={18} />
+                Nueva solicitud
+              </NavLink>
+              {esRrhh && (
+                <NavLink to="/exportacion">
+                  <FileSpreadsheet aria-hidden="true" size={18} />
+                  Exportación GMS
+                </NavLink>
+              )}
+            </div>
+          </nav>
+        )}
       </header>
-      <main className="contenedor">
-        {error && <p className="error">No se pudo cargar la lista de usuarios de prueba: {error}</p>}
+      <main className="contenedor contenido">
+        {error && <Mensaje tipo="error">No se pudo cargar la lista de usuarios de prueba: {error}</Mensaje>}
         {!usuario ? (
           !cargando && (
             <>
-              <h1>Portal de Novedades</h1>
-              <p>Solicitudes de licencias, francos y cambios de turno.</p>
-              <p className="aviso">Todavía no hay login: elegí un usuario de prueba arriba para empezar.</p>
+              <section className="bienvenida">
+                <h1>Tus novedades, sin papeles</h1>
+                <p>Pedí licencias, francos, cambios de turno y retiros fuera de horario desde cualquier dispositivo.</p>
+                <p className="bienvenida-aviso">
+                  Todavía no hay login: elegí un usuario de prueba arriba para empezar.
+                </p>
+              </section>
               <EstadoSistema />
             </>
           )
