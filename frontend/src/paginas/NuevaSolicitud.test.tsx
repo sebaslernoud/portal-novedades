@@ -32,6 +32,22 @@ async function completarFrancoAutorizado() {
 describe('Nueva solicitud', () => {
   afterEach(() => vi.restoreAllMocks());
 
+  it('muestra una tarjeta de color por formulario', async () => {
+    simularApi({});
+    renderizarApp('/nueva', 1004);
+
+    const esperadas: [RegExp, string][] = [
+      [/Retiro \/ ingreso/, 'fondo-turquesa'],
+      [/Licencia especial/, 'fondo-celeste'],
+      [/Franco compensatorio/, 'fondo-lima'],
+      [/Franco autorizado/, 'fondo-amarillo'],
+      [/Cambio de turno/, 'fondo-azul'],
+    ];
+    for (const [nombre, color] of esperadas) {
+      expect(await screen.findByRole('button', { name: nombre })).toHaveClass('tarjeta-tipo', color);
+    }
+  });
+
   it('revisa las advertencias y envía', async () => {
     const llamadas = simularApi({
       'GET /api/usuarios/jefes': JEFES,
