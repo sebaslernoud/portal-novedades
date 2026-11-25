@@ -12,6 +12,8 @@ from app.modelos import EstadoSolicitud, RegistroAuditoria, Solicitud, TipoSolic
 from app.reglas import FilaNovedad, generar_filas
 from app.reglas.advertencias import calcular_advertencias
 from app.reglas.fechas import ahora_negocio
+from app.solicitudes import circuito
+from app.solicitudes.circuito import Paso
 from app.solicitudes.validacion import Borrador, SolicitudValidada, validar_borrador, validar_envio
 
 # Estados en los que la solicitud ya no es un borrador privado del solicitante.
@@ -161,6 +163,74 @@ def obtener_detalle(usuario: Usuario, solicitud_id: int) -> Solicitud:
     if solicitud is None or not puede_ver(usuario, solicitud):
         raise no_encontrada()
     return solicitud
+
+
+def _solicitud_con_paso(usuario: Usuario, solicitud_id: int) -> tuple[Solicitud, Paso]:
+    solicitud = sesion.get(Solicitud, solicitud_id, with_for_update=True)
+    if solicitud is None or not puede_ver(usuario, solicitud):
+        raise no_encontrada()
+    paso = circuito.paso_actual(solicitud)
+    if paso is None:
+        raise ErrorApi("YA_RESUELTA", "Esta solicitud ya no está pendiente de aprobación.", 409)
+    if not circuito.tiene_el_paso(usuario, solicitud):
+        raise ErrorApi("SIN_PASO", "Esta solicitud no está esperando tu decisión.", 403)
+    return solicitud, paso
+
+
+def aprobar(usuario: Usuario, solicitud_id: int, ahora: datetime | None = None) -> Solicitud:
+    solicitud, paso = _solicitud_con_paso(usuario, solicitud_id)
+    auditar(solicitud, usuario, paso.rol, paso.accion_aprobar, paso.al_aprobar, ahora or ahora_negocio())
+    sesion.commit()
+    return solicitud
+
+
+def rechazar(usuario: Usuario, solicitud_id: int, motivo: object, ahora: datetime | None = None) -> Solicitud:
+    texto = circuito.validar_motivo(motivo)
+    solicitud, paso = _solicitud_con_paso(usuario, solicitud_id)
+    auditar(
+        solicitud,
+        usuario,
+        paso.rol,
+        "rechazar",
+        EstadoSolicitud.RECHAZADA,
+        ahora or ahora_negocio(),
+        motivo=texto,
+    )
+    sesion.commit()
+    return solicitud
+
+
+def bandeja(usuario: Usuario) -> dict[str, list[Solicitud]]:
+    """Lo que el usuario tiene para resolver, agrupado por el rol con el que decide."""
+
+    def pendientes(*condiciones: Any) -> list[Solicitud]:
+        consulta = select(Solicitud).where(*condiciones).order_by(Solicitud.enviada_en, Solicitud.id)
+        return list(sesion.scalars(consulta))
+
+    return {
+        "companero": pendientes(
+            Solicitud.estado == EstadoSolicitud.PENDIENTE_COMPANERO,
+            Solicitud.companero_legajo == usuario.legajo,
+        ),
+        "jefe": pendientes(
+            Solicitud.estado == EstadoSolicitud.PENDIENTE_JEFE, Solicitud.jefe_legajo == usuario.legajo
+        ),
+        "rrhh": pendientes(
+            Solicitud.estado == EstadoSolicitud.PENDIENTE_RRHH, Solicitud.solicitante_legajo != usuario.legajo
+        )
+        if usuario.tiene_rol("rrhh")
+        else [],
+    }
+
+
+def novedades_previstas(usuario: Usuario, solicitud_id: int, hoy: date | None = None) -> list[FilaNovedad]:
+    """Filas GMS que va a generar la solicitud. Solo para el jefe asignado y RR.HH."""
+    solicitud = obtener_detalle(usuario, solicitud_id)
+    if not (usuario.tiene_rol("rrhh") or solicitud.jefe_legajo == usuario.legajo):
+        raise ErrorApi("SIN_PERMISO", "No tenés permiso para ver las novedades de esta solicitud.", 403)
+    if solicitud.estado == EstadoSolicitud.BORRADOR:
+        return []
+    return generar_filas(validar_guardada(solicitud).entrada, hoy or ahora_negocio().date())
 
 
 def puede_ver(usuario: Usuario, solicitud: Solicitud) -> bool:

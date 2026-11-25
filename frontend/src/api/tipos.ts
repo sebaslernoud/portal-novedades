@@ -25,7 +25,11 @@ export type EstadoSolicitud =
   | 'RECHAZADA'
   | 'CANCELADA';
 
-export type Renglon = { fecha: string; hora_desde: string; hora_hasta: string };
+// Quien no es RR.HH. no ve la exportación a GMS: el backend le manda NO_CARGADA (aprobada sin
+// exportar) o CARGADA (exportada) en lugar del estado real.
+export type EstadoVisible = EstadoSolicitud | 'NO_CARGADA' | 'CARGADA';
+
+export type Renglon ={ fecha: string; hora_desde: string; hora_hasta: string };
 
 export type DatosRetiroIngreso = {
   tipo_movimiento: '' | 'retiro' | 'ingreso';
@@ -81,8 +85,8 @@ export type RegistroAuditoria = {
   usuario: Persona;
   rol: string;
   accion: string;
-  estado_anterior: EstadoSolicitud | null;
-  estado_nuevo: EstadoSolicitud;
+  estado_anterior: EstadoVisible | null;
+  estado_nuevo: EstadoVisible;
   motivo: string | null;
   creado_en: string;
 };
@@ -90,7 +94,7 @@ export type RegistroAuditoria = {
 export type Solicitud = {
   id: number;
   tipo: TipoSolicitud;
-  estado: EstadoSolicitud;
+  estado: EstadoVisible;
   solicitante: Persona;
   jefe: Persona | null;
   jefe_legajo: number | null;
@@ -102,7 +106,14 @@ export type Solicitud = {
   enviada_en: string | null;
   lote_exportacion_id: number | null;
   auditoria?: RegistroAuditoria[];
+  // Solo en el detalle: lo que el usuario actual puede decidir sobre esta solicitud.
+  acciones_disponibles?: AccionCircuito[];
 };
+
+export type AccionCircuito = 'aprobar' | 'rechazar';
+
+// Lo que cada uno tiene para resolver, según el rol con el que decide.
+export type Bandeja = { companero: Solicitud[]; jefe: Solicitud[]; rrhh: Solicitud[] };
 
 export type ListaSolicitudes = { mias: Solicitud[]; donde_participo: Solicitud[] };
 

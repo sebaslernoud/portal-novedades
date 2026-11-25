@@ -21,8 +21,8 @@ def _rrhh() -> Usuario:
 
 @api.get("/exportaciones/pendientes")
 def listar_pendientes():
-    _rrhh()
-    return jsonify([solicitud_json(s) for s in servicio.listar_aprobadas()])
+    usuario = _rrhh()
+    return jsonify([solicitud_json(s, usuario) for s in servicio.listar_aprobadas()])
 
 
 @api.get("/exportaciones")
